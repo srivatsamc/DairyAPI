@@ -3,7 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dairy.API", "Dairy.API.csproj", "{BBB762D5-07EF-44F8-9A02-441E4F88A374}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dairy.API", "Dairy.API.csproj", "{BBB762D5-07EF-44F8-9A02-441E4F88A374}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dairy.Application", "..\Dairy.Application\Dairy.Application.csproj", "{2B7F8160-1AFB-4488-80C5-3BF37E860CAF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dairy.Domain", "..\Dairy.Domain\Dairy.Domain.csproj", "{64CACAC1-B5AE-4B40-8ADB-DAD52CB1F449}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dairy.Infrastructure", "..\Dairy.Infrastructure\Dairy.Infrastructure.csproj", "{02DD8B82-BD16-478D-B55E-9E1F9E5A9E56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbHelper", "..\DbHelper\DbHelper.csproj", "{D1C5BB56-D3E6-45ED-813B-25142CC2E106}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "..\Utility\Utility.csproj", "{3E2C2708-0850-43BB-AD0E-8CEC61FDD242}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +25,26 @@ Global
 		{BBB762D5-07EF-44F8-9A02-441E4F88A374}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBB762D5-07EF-44F8-9A02-441E4F88A374}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBB762D5-07EF-44F8-9A02-441E4F88A374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B7F8160-1AFB-4488-80C5-3BF37E860CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B7F8160-1AFB-4488-80C5-3BF37E860CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B7F8160-1AFB-4488-80C5-3BF37E860CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B7F8160-1AFB-4488-80C5-3BF37E860CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64CACAC1-B5AE-4B40-8ADB-DAD52CB1F449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64CACAC1-B5AE-4B40-8ADB-DAD52CB1F449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64CACAC1-B5AE-4B40-8ADB-DAD52CB1F449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64CACAC1-B5AE-4B40-8ADB-DAD52CB1F449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02DD8B82-BD16-478D-B55E-9E1F9E5A9E56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02DD8B82-BD16-478D-B55E-9E1F9E5A9E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02DD8B82-BD16-478D-B55E-9E1F9E5A9E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02DD8B82-BD16-478D-B55E-9E1F9E5A9E56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1C5BB56-D3E6-45ED-813B-25142CC2E106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1C5BB56-D3E6-45ED-813B-25142CC2E106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1C5BB56-D3E6-45ED-813B-25142CC2E106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1C5BB56-D3E6-45ED-813B-25142CC2E106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E2C2708-0850-43BB-AD0E-8CEC61FDD242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E2C2708-0850-43BB-AD0E-8CEC61FDD242}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E2C2708-0850-43BB-AD0E-8CEC61FDD242}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E2C2708-0850-43BB-AD0E-8CEC61FDD242}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

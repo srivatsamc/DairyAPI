@@ -1,7 +1,28 @@
+using Dairy.Application;
+using DbHelper;
+using Microsoft.Extensions.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.ResolveConfigurationApplicationDI(builder.Configuration);
+
+builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
+builder.Services.AddScoped<DapperContext>();
+builder.Services.AddTransient<IDapperHelper, DapperHelper>();
+builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.WithOrigins("https://localhost:7270/",
+                                              "http://www.contoso.com");
+                      });
+});
 
 var app = builder.Build();
 
@@ -14,14 +35,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseCors(MyAllowSpecificOrigins);
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+//app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
