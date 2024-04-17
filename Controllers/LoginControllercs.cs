@@ -2,6 +2,7 @@
 using Dairy.Application.Interface;
 using Dairy.Domain;
 using DairyAPI.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utility;
@@ -11,32 +12,90 @@ namespace Dairy.API.Controllers;
 [Route("api/login/[controller]")]
 [ApiController]
 //[Authorize]
-public class LoginControllercs : ControllerBase
+public class LoginController : ControllerBase
 {
-    private readonly ILogger<LoginControllercs> _logger;
+    private readonly ILogger<LoginController> _logger;
     private readonly IConfiguration _configuration;
     private readonly IDairyServices _dairyServices;
+    private readonly IValidator<LoginModel> _loginValidator;
 
     private string? key { get;set; }
 
-    public LoginControllercs(ILogger<LoginControllercs> logger, IConfiguration configuration, IDairyServices dairyServices)
+    public LoginController(ILogger<LoginController> logger, IConfiguration configuration, IDairyServices dairyServices, IValidator<LoginModel> loginValidator)
     {
         _logger = logger;
         _configuration = configuration;
         _dairyServices = dairyServices;
+        _loginValidator = loginValidator;
         key = _configuration.GetValue<string>("EncryptDecrypt:Key");
     }
 
-    [HttpPost("InsertCustomer")]
-    public async Task<ActionResult<ActionResponse>> InsertCustomer(LoginModel request)
+    /// <summary>
+    /// Method to verify the logged in user
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("ValidateUser")]
+    public async Task<ActionResult<ActionResponse>> ValidateUser(Credentials request)
     {
-        _logger.LogTrace($"Entered method {InsertCustomer}");
+        _logger.LogTrace($"Entered method {nameof(ValidateUser)}");
 
         try
         {
-            if (request != null)
+            if (request == null)
+                return BadRequest("Request cannot be null or empty");
+
+            LoginCredentials logins = new LoginCredentials
+            {
+                Email = request.Username
+            };
+
+            bool isValidUser = await _dairyServices.IsCustomerExists(logins, 1); // 1 for login verification
+
+            if(isValidUser)
+            {
+                logins.Password = PasswordManager.HashPassword(request.Password);
+                
+                bool isValid = await _dairyServices.IsCustomerExists(logins, 2);
+
+                if (isValid)
+                    return Ok(new ActionResponse { Success = true });
+
+                return Ok(new ActionResponse { Success = false, ErrorMessage = "Please enter the correct password" });
+            }
+            else
+                return Ok(new ActionResponse { Success = false, ErrorMessage = "Username does not exists!" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error in validating user : {ex.ToString}");
+            return StatusCode(500);
+        }
+    }
+
+    /// <summary>
+    /// Method to insert new user
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("InsertCustomer")]
+    public async Task<ActionResult<ActionResponse>> InsertCustomer(LoginModel request)
+    {
+        _logger.LogTrace($"Entered method {nameof(InsertCustomer)}");
+
+        try
+        {
+            if (request == null)
                 return BadRequest("Access denied");
 
+            var validationResult = await _loginValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+                return BadRequest(errors);
+            }
+
+            string hashedPassword = PasswordManager.HashPassword(request.Password);
 
             Login login = new Login
             {
@@ -44,8 +103,8 @@ public class LoginControllercs : ControllerBase
                 Lastname = request?.Lastname,
                 Address = request?.Address,
                 Email = request?.Email, 
-                Password = new PasswordManager().EncryptPassword(request?.Password, key),
-                Contact = request?.Contact ?? 0,
+                Password = hashedPassword,
+                Contact = request?.Contact,
                 RoleId = request?.RoleId ?? 2
             };
 
@@ -59,7 +118,7 @@ public class LoginControllercs : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error in inserting new customer : {ex.ToString}");
-            return BadRequest(500);
+            return StatusCode(500);
         }
     }
 }
